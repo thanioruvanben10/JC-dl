@@ -151,6 +151,7 @@ def get_manifest(VideoID):
 def get_m3u8(manifest):
     m3u8 = manifest['data']['playbackUrls'][1]['url']
     return m3u8
+    print ("m3u8:",m3u8)
 
 def mod_m3u8(url):
     mod = url.replace("jiovod.cdn.jio.com", "jiobeats.cdn.jio.com")
@@ -158,6 +159,7 @@ def mod_m3u8(url):
     lst[-1] = "chunklist.m3u8"
     mod = "/".join(lst)
     return mod
+    print ("mod:",mod)
 
 print ('JioCinema Content Downloading Tool')
 load_config()
@@ -167,6 +169,7 @@ if accesstoken == "" and devid == "":
     load_config()
 VideoID = input ('Enter VideoID: ')
 manifest = get_manifest(VideoID)
+print("manifest:",manifest)
 
 try:
     content_name = manifest['data']['name']
@@ -185,6 +188,7 @@ def get_streams(m3u8):
 
 
 m3u8_url = get_m3u8(manifest)
+print("m3u8_url:",m3u8_url)
 nonDRM_m3u8_url = mod_m3u8(m3u8_url)
 get_streams(nonDRM_m3u8_url)
 
