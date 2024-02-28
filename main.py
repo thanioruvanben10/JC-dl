@@ -149,3 +149,67 @@ if accesstoken == "" and devid == "":
 VideoID = input ('Enter VideoID: ')
 manifest = get_manifest(VideoID)
 print("MANIFEST: ",manifest)
+
+access_token = accesstoken  
+    
+print('\ntest link: https://www.jiocinema.com/movies/sergeant-bhojpuri/3767689\ntest link: https://www.jiocinema.com/tv-shows/kaalkoot/1/janam-din/3788001\n')
+
+link = input('link: ')
+link_id = re.findall(r'.*/(.*)', link)[0].strip()
+
+decoded = jwt.decode(access_token, options={"verify_signature": False})
+#print(f'\n{decoded}\n')
+
+deviceId = decoded['data']['deviceId']
+uniqueid = decoded['data']['userId']
+appName = decoded['data']['appName']
+
+headers2 = {
+    'authority': 'apis-jiovoot.voot.com',
+    'accept': 'application/json, text/plain, */*',
+    'accesstoken': access_token,
+    'appname': appName,
+    'content-type': 'application/json',
+    'deviceid': deviceId,
+    'origin': 'https://www.jiocinema.com',
+    'referer': 'https://www.jiocinema.com/',
+    'uniqueid': uniqueid,
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+    'versioncode': '560',
+    'x-platform': 'androidweb',
+    'x-platform-token': 'web',
+}
+
+json_data2 = {
+    '4k': False,
+    'ageGroup': '18+',
+    'appVersion': '3.4.0',
+    'bitrateProfile': 'xhdpi',
+    'capability': {
+        'drmCapability': {
+            'aesSupport': 'yes',
+            'fairPlayDrmSupport': 'yes',
+            'playreadyDrmSupport': 'none',
+            'widevineDRMSupport': 'yes',
+        },
+        'frameRateCapability': [
+            {
+                'frameRateSupport': '30fps',
+                'videoQuality': '1440p',
+            },
+        ],
+    },
+    'continueWatchingRequired': True,
+    'dolby': False,
+    'downloadRequest': False,
+    'hevc': False,
+    'kidsSafe': False,
+    'manufacturer': 'Windows',
+    'model': 'Windows',
+    'multiAudioRequired': True,
+    'osVersion': '10',
+    'parentalPinValid': True,
+}
+
+response2 = requests.post('https://apis-jiovoot.voot.com/playbackjv/v4/'+link_id+'', headers=headers2, json=json_data2, verify=False).json()
+print("META2: ",response2)
