@@ -147,6 +147,7 @@ if accesstoken == "" and devid == "":
     login (M_No)
     load_config()
 VideoID = input ('Enter VideoID: ')
+print(accesstoken)
 manifest = get_manifest(VideoID)
 print("MANIFEST: ",manifest)
 
