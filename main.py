@@ -53,7 +53,7 @@ def login(mobile_number):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
 })
     print(send.content)
-    if 'karix' in str(send.content):
+    if 'idam' in str(send.content):
         OTP = input ('Enter OTP Received: ')
         verify = requests.post(url = OTPVerifyURL, headers = {
             'accesstoken': accesstoken,
