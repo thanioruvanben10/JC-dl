@@ -2,13 +2,6 @@ import requests, json
 import os, sys
 import base64
 
-# define paths
-currentFile = __file__
-realPath = os.path.realpath(currentFile)
-dirPath = os.path.dirname(realPath)
-dirName = os.path.basename(dirPath)
-ytdl_path = dirPath + "\yt-dlp.exe"
-
 # define 
 def load_config():
     global accesstoken, devid
@@ -148,20 +141,6 @@ def get_manifest(VideoID):
         })
     return json.loads(response.text)
 
-def get_m3u8(manifest):
-    m3u8 = manifest['data']['playbackUrls'][1]['url']
-    return m3u8
-    print ("m3u8:",m3u8)
-
-def mod_m3u8(url):
-    mod = url.replace("jiovod.cdn.jio.com", "jiobeats.cdn.jio.com")
-    lst = mod.split("/")
-    lst[-1] = "chunklist.m3u8"
-    mod = "/".join(lst)
-    return mod
-    print ("mod:",mod)
-
-print ('JioCinema Content Downloading Tool')
 load_config()
 if accesstoken == "" and devid == "":
     M_No = input ('Enter Mobile Number: ')
@@ -169,26 +148,4 @@ if accesstoken == "" and devid == "":
     load_config()
 VideoID = input ('Enter VideoID: ')
 manifest = get_manifest(VideoID)
-print("manifest:",manifest)
-
-try:
-    content_name = manifest['data']['name']
-except KeyError:
-    print ("Incorrect/Malformed VideoID")
-    sys.exit()
-print (f'Downloading: {content_name} |  {manifest["data"]["defaultLanguage"]}')
-# print (f'Subtitles available: {metadata["subtitle"]}')    
-fileName = f'{content_name}.mp4'
-
-def get_streams(m3u8):
-    print ("Downloading A/V")
-    os.system(f'{ytdl_path} {m3u8} --allow-unplayable-formats --downloader aria2c --user-agent "JioOnDemand/1.5.2.1 (Linux;Android 4.4.2) Jio" -q --no-warnings') # + -P TEMP:{cachePath} -P HOME:{outPath}
-    os.rename(f'{dirPath}\chunklist [chunklist].mp4', fileName)
-    print ("\nSuccessfully downloaded the stream!")
-
-
-m3u8_url = get_m3u8(manifest)
-print("m3u8_url:",m3u8_url)
-nonDRM_m3u8_url = mod_m3u8(m3u8_url)
-get_streams(nonDRM_m3u8_url)
-        
+print("MANIFEST: ",manifest)
